@@ -1,7 +1,6 @@
 export const CIRCOM_BIGINT_N = 121;
 export const CIRCOM_BIGINT_K = 17;
 export function bigIntToChunkedBytes(
-    // eslint-disable-next-line @typescript-eslint/ban-types
     num,
     bytesPerChunk,
     numChunks
@@ -15,7 +14,6 @@ export function bigIntToChunkedBytes(
     return res;
   }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function toCircomBigIntBytes(num) {
   return bigIntToChunkedBytes(num, CIRCOM_BIGINT_N, CIRCOM_BIGINT_K);
 }
