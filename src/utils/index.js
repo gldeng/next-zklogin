@@ -12,14 +12,15 @@ export function bigIntToChunkedBytes(
       res.push(((bigintNum >> BigInt(i * bytesPerChunk)) & msk).toString());
     }
     return res;
-  }
+}
 
 export function toCircomBigIntBytes(num) {
   return bigIntToChunkedBytes(num, CIRCOM_BIGINT_N, CIRCOM_BIGINT_K);
 }
 
-export const padString = (str, paddedBytesSize) => {
-    let paddedBytes = Array.from(str, (c) => c.charCodeAt(0));
-    paddedBytes.push(...new Array(paddedBytesSize - paddedBytes.length).fill(0));
-    return paddedBytes;
+export function padString(str, paddedBytesSize) {
+  let paddedBytes = Array.from(str, (c) => c.charCodeAt(0));
+  const paddingLength = Math.max(0, paddedBytesSize - paddedBytes.length);
+  paddedBytes.push(...new Array(paddingLength).fill(0));
+  return paddedBytes;
 }
