@@ -12,7 +12,6 @@ export default function Home() {
     salt = "a677999396dc49a28ad6c9c242719bb3";
 
   const generateInput = async () => {
-    // eslint-disable-next-line prettier/prettier, no-restricted-globals
     const signatureBigInt = BigInt(
       "0x" + Buffer.from(jwtSignature, "base64").toString("hex")
     );
