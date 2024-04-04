@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+// @ts-ignore
 import AElf from 'aelf-sdk';
 import axios from 'axios';
 import GoogleProvider from "next-auth/providers/google";
