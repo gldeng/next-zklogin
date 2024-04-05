@@ -20,38 +20,47 @@ export default NextAuth({
         const jwtSignature = id_token?.split(".")[2];
         const salt = "a677999396dc49a28ad6c9c242719bb3";
         let identifierHash = "7f0bdbbd5bc4c68c21afe63067d39bbc863432cec2c56b9d351cad89346a8b47";
-        let proof = "e4f43e941f23f1478ffd459a9f6ec97e60ad790467bb9ffca97d7865ac5df09953cbaf72d64482095954e1770b249de00e405b2c5ac47b601850cac0939749183f8447be0c6b3e44e7bb61100b1f6b0fac038ea4f56271c45f2a3ebe79a367034aa423bf11f4dc3ab21440dd6642255d4a50d843a3db42fc3fa79852adec062f";
-        console.log("jwt: ", jwt);
-        console.log("jwtSignature: ", jwtSignature);
-        console.log("salt: ", salt);
+        let proof;
         const result = generateInput({jwtSignature, jwt, salt});
         const issuerPubkey = (await result).jwkValue;
         const input = (await result).input;
         // GETTING THE PROOF BY API CALL
-        /* try {
-          const response = await axios.post(
-            'https://example.com/api/post-endpoint',
-            {...input},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              }
-            }
-          );
-          console.log("response: ", response.data)
+        const param = {
+          jwt: input.jwt.map(item  =>  item.toString()),
+          signature: input.signature,
+          pubkey: input.pubkey,
+          salt: input.salt.map(item  =>  item.toString()),
+        }
+        console.log(param)
+        try {
+          const response = await fetch("http://34.29.20.98:7020/proof/generate", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(param)
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          
+          const responseData = await response.json();
+          proof = responseData.proof;
+          console.log('Proof:', proof);
         } catch (error) {
           console.error('Error:', error);
-        } */
+        }
 
         
 
         // CREATE WALLET USING AELF SDK
         // aelf-public-node.aelf.io --> production
         // aelf-test-node.aelf.io -> Testing
-        const aelf = new AElf(new AElf.providers.HttpProvider('aelf-test-node.aelf.io'));
+        const aelf = new AElf(new AElf.providers.HttpProvider('http://34.29.20.98:8000'));
         const wallet = AElf.wallet.createNewWallet();
         let contract;
-        const contractAddress = "wdwewe"; // Need to get from YM after contract deployment
+        const contractAddress = "2LUmicHyH4RXrMjG4beDwuDsiWJESyLkgkwPdGTR8kahRzq5XS"; // Need to get from YM after contract deployment
         // CREATING CA OBJECT
         const caHolderObject = {
           "guardianApproved": {
@@ -70,22 +79,30 @@ export default NextAuth({
           }
         };
         
-        /* (async () => {
+        (async () => {
           // CREATE CONTRACT
+          console.log("Contracted creating...");
           contract = await aelf.chain.contractAt(contractAddress, wallet);
+          console.log("Contracted created with ", contractAddress);
 
           // CREATE CA HOLDER ACCOINT
-          await contract.CreateCAHolder(caHolderObject);
+          console.log("Creating CA Holder...");
+          console.log("CA Holder object: ", caHolderObject);
+          const response = await contract.CreateCAHolder(caHolderObject);
+          console.log("CA Holder response: ", response.TransactionId);
 
           // SIGN AND TRAX
-          const transactionId = await contract.transfer({
+          // ELF_2pRWD7pt2CLHwoyE63xnPmGk8S5XzjNzHSp52cmXSu2TXw4JXe_AELF
+          // Testnet
+          // console.log("Sign and Transaction contract api creating...", contract);
+          const transactionId = await contract.sendTransaction({
             symbol: "ELF",
-            to: "7s4XoUHfPuqoZAwnTV7pHWZAaivMiL8aZrDSnY9brE1woa8vz",
-            amount: "1000000000",
+            to: "2pRWD7pt2CLHwoyE63xnPmGk8S5XzjNzHSp52cmXSu2TXw4JXe",
+            amount: "100",
             memo: "transfer in demo"
           });
-          console.log(transactionId);
-        })(); */
+          console.log("Sign and Transaction triggered: ", transactionId);
+        })();
       }
 
       return token;
