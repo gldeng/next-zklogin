@@ -10,7 +10,8 @@
     "generateinput": "tsx scripts/generate-input.ts"
   },
   "dependencies": {
-    "aelf-sdk": "^3.4.7",
+    "@portkey/contracts": "^2.5.0-alpha.18",
+    "aelf-sdk": "^3.4.8",
     "axios": "^1.6.8",
     "circomlib": "^2.0.5",
     "inquirer": "^9.2.12",
