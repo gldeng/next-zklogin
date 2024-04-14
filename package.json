@@ -12,7 +12,6 @@
   "dependencies": {
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
-    "@mui/styles": "^5.15.15",
     "@portkey/contracts": "^2.5.0-alpha.18",
     "aelf-sdk": "^3.4.8",
     "axios": "^1.6.8",

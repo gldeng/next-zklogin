@@ -1,0 +1,31 @@
+.header {
+    background-color: #0f5dcb;
+    padding: 16px 16px;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 1px 1px 2px #094aa5;
+    display: flex;
+}
+.logoContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 22px;
+  font-weight: 600;
+  flex: 1;
+}
+.addressContainer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+.chipBox {
+  width: 200px;
+  cursor: pointer;
+}

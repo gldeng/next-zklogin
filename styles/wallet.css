@@ -1,0 +1,35 @@
+.walletBox {
+  border: 2px solid #256dd3;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px 0 16px;
+  margin: 10% auto 16px auto;
+  width: 400px;
+  box-sizing: border-box;
+  color: #2c3e50;
+  font-size: 12px;
+}
+.walletBoxTitle {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  margin: 16px 0;
+}
+.tabTitle {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 16px 0;
+}
+.btnContainer {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+}
+.info {
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0 0 16px 0;
+  text-align: center;
+
+}

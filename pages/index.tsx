@@ -4,10 +4,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import useLogin from '../src/hooks/useLogin';
 import {ExternalTransferType, InternalTransferType} from '../src/types';
 import Header from '../src/view/common/header';
-import useStyles from '../styles/wallet';
 
 export default function Home() {
-  const classes = useStyles();
   const { data: session, status } = useSession();
   const [caHolderTranxId, setCAHolderTranxId] = useState<string>('');
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -48,8 +46,8 @@ export default function Home() {
   return (
     <>
     <Header onlogin={login} onlogout={logout} email={userEmail}/>
-    <Box className={classes.walletBox}>
-      <Box className={classes.walletBoxTitle}>zkLogin Wallet</Box>
+    <Box className='walletBox'>
+      <Box className='walletBoxTitle'>zkLogin Wallet</Box>
       {(status === "authenticated") ? (
         <Box>
           <Box display={'flex'} gap={1}>
@@ -66,7 +64,7 @@ export default function Home() {
           </Tabs>
           {selectedTab === '1' && 
             <Box my={2}>
-              <Box className={classes.tabTitle}>Manager to CA holder account transfer</Box>
+              <Box className='tabTitle'>Manager to CA holder account transfer</Box>
               <TextField label="Manage address" variant="outlined" size="small" fullWidth 
               value={internalTransferObj.managerAddress} 
               onChange={(event) => setInternalTransferObj({...internalTransferObj, managerAddress: event.target.value})}/>
@@ -74,14 +72,14 @@ export default function Home() {
               <TextField label="CA Holder address" variant="outlined" size="small" fullWidth 
               value={internalTransferObj.caHolderAddress} 
               onChange={(event) => setInternalTransferObj({...internalTransferObj, caHolderAddress: event.target.value})}/>
-              <Box className={classes.btnContainer}>
+              <Box className='btnContainer'>
                 <Button variant="contained" onClick={() => internalTransfer(internalTransferObj)} fullWidth>Transfer</Button>
               </Box>
             </Box>
           }
           {selectedTab === '2' && 
             <Box my={2}>
-              <Box className={classes.tabTitle}>Transfer to another wallet</Box>
+              <Box className='tabTitle'>Transfer to another wallet</Box>
               <TextField label="Tranx Id" variant="outlined" size="small" fullWidth
                value={externalTransferObj.caTranxId}
                defaultValue={localStorage.getItem("caHolderTranxId")} 
@@ -94,7 +92,7 @@ export default function Home() {
               <TextField label="Amount" variant="outlined" size="small" fullWidth 
               value={externalTransferObj.amount}
               onChange={(event) => setExternalTransferObj({...externalTransferObj, amount: event.target.value})}/>
-              <Box className={classes.btnContainer}>
+              <Box className='btnContainer'>
                 <Button variant="contained" onClick={() => externalTransfer(externalTransferObj)} fullWidth>Transfer</Button>
               </Box>
             </Box>
@@ -102,7 +100,7 @@ export default function Home() {
         </Box>
       ) : (
         <Box pb={2}>
-          <Box className={classes.info}>Google email integration, users can do both internal and external transfers. 
+          <Box className='info'>Google email integration, users can do both internal and external transfers. 
             Internal transfers involve moving funds from the manager's account to a CA holder's address, 
             while external transfers entail sending funds from their own wallet to another recipient's wallet.</Box>
           <Button variant="contained" onClick={() => login()} fullWidth>Connect</Button>
