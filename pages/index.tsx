@@ -101,8 +101,8 @@ export default function Home() {
       ) : (
         <Box pb={2}>
           <Box className='info'>Google email integration, users can do both internal and external transfers. 
-            Internal transfers involve moving funds from the manager's account to a CA holder's address, 
-            while external transfers entail sending funds from their own wallet to another recipient's wallet.</Box>
+            Internal transfers involve moving funds from the manager&apos;s account to a CA holder&apos;s address, 
+            while external transfers entail sending funds from their own wallet to another recipient&apos;s wallet.</Box>
           <Button variant="contained" onClick={() => login()} fullWidth>Connect</Button>
         </Box>
       )}
