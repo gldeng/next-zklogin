@@ -5,6 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { handleManagerForwardCall } from "@portkey/contracts";
 import {generateInput} from '../../../scripts/generate-input';
 import { deserializeLogs } from "../../../scripts/deserialize-logs";
+import { setSessionValue } from "../../../src/utils/cookies";
 
 export default NextAuth({
   providers: [
@@ -23,8 +24,6 @@ export default NextAuth({
         const TO_ADDRESS = "2pRWD7pt2CLHwoyE63xnPmGk8S5XzjNzHSp52cmXSu2TXw4JXe";
         const contractAddress = "2LUmicHyH4RXrMjG4beDwuDsiWJESyLkgkwPdGTR8kahRzq5XS";
         const tokenContractName = "JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE";
-        const controller = new AbortController();
-        const signal = controller.signal;
         let identifierHash;
         let proof;
         let publicKey;
@@ -32,6 +31,7 @@ export default NextAuth({
         const issuerPubkey = (await result).jwkValue;
         const input = (await result).input;
         // GETTING THE PROOF BY API CALL
+        console.log("id_token: ", id_token)
         const param = {
           jwt: id_token, 
           //input.jwt.map(item  =>  item.toString()),
@@ -40,10 +40,6 @@ export default NextAuth({
           salt: salt,
           // input.salt.map(item  =>  item.toString()),
         }
-        const timeoutId = setTimeout(() => {
-          controller.abort();
-          console.log('Request timed out');
-      }, 60000);
         console.log("Proof generator param: ", param);
         try {
           const response = await fetch("http://35.202.43.42:7020/proof/generate-mock", {
@@ -58,7 +54,6 @@ export default NextAuth({
               'Connection': 'keep-alive'
             },
             body: JSON.stringify(param),
-            signal: signal
           });
 
           if (!response.ok) {
@@ -75,15 +70,23 @@ export default NextAuth({
         } catch (error) {
           console.error('Proof generator rrror:', error);
         }
+        setSessionValue('id_token', id_token || '');
+        setSessionValue('proof', proof);
+        setSessionValue('identifierHash', identifierHash);
+        setSessionValue('publicKey', publicKey);
 
-        // CREATE WALLET USING AELF SDK
+        const httpProvider = 'http://35.202.43.42:8000';
+        const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
+        let contract;
+        console.log("proof: ", proof);
+        console.log("identifierHash: ", identifierHash);
+        console.log("publicKey: ", publicKey);
+        
         // aelf-public-node.aelf.io --> production
         // aelf-test-node.aelf.io -> Testing
         console.log("Contract creating process...");
-        const aelf = new AElf(new AElf.providers.HttpProvider('http://35.202.43.42:8000'));
-        const privateKey = '1111111111111111111111111111111111111111111111111111111111111111'
+        const aelf = new AElf(new AElf.providers.HttpProvider(httpProvider));
         const wallet = AElf.wallet.getWalletByPrivateKey(privateKey);
-        let contract; 
         console.log("CA holder object creating...");
         // CREATING CA OBJECT
         const caHolderObject = {
@@ -103,79 +106,17 @@ export default NextAuth({
           }
         };
         console.log("caHolderObject: ", caHolderObject);
-        (async () => {
+
+        try {
           // CREATE CONTRACT
-          console.log("Contract creating...");
-          console.log("Contract address: ", contractAddress);
-          console.log("Contract wallet: ", wallet);
           contract = await aelf.chain.contractAt(contractAddress, wallet);
-          console.log("Contract completed");
 
           // CREATE CA HOLDER ACCOINT
-          const response = await contract.CreateCAHolder(caHolderObject);
-          
-          const CREATE_CA_TRANSACTION_ID = response.TransactionId;
-          console.log("Create CA transaction Id: ", CREATE_CA_TRANSACTION_ID);
-
-          let tokenContractAddress;
-            // get chain status
-            const chainStatus = await aelf.chain.getChainStatus();
-            // get genesis contract address
-            const GenesisContractAddress = chainStatus.GenesisContractAddress;
-            // get genesis contract instance
-            const zeroContract = await aelf.chain.contractAt(
-              GenesisContractAddress,
-              wallet
-            );
-            // Get contract address by the read only method `GetContractAddressByName` of genesis contract
-            tokenContractAddress = await zeroContract.GetContractAddressByName.call(
-              AElf.utils.sha256(tokenContractName)
-            );
-          
-            const caContract = await aelf.chain.contractAt(contractAddress, wallet);
-          
-            const res = await aelf.chain.getTxResult(CREATE_CA_TRANSACTION_ID);
-          
-            const logs = await deserializeLogs(
-              aelf,
-              res.Logs.filter((i: any) => i.Name === "CAHolderCreated")
-            );
-          
-            const caHash = logs?.[0].caHash;
-          
-            if (caHash) {
-              const params = await handleManagerForwardCall({
-                paramsOption: {
-                  caHash,
-                  contractAddress: tokenContractAddress,
-                  methodName: "Transfer",
-                  args: {
-                    to: TO_ADDRESS,
-                    symbol: "ELF",
-                    amount: "20000000",
-                    memo: "ca transfer",
-                  },
-                },
-                instance: aelf,
-                functionName: "Transfer",
-              });
-          
-              const res = await caContract.ManagerForwardCall({
-                caHash,
-                contractAddress: tokenContractAddress,
-                methodName: "Transfer",
-                args: params.args,
-              });
-          
-              try {
-                const res2 = await aelf.chain.getTxResult(res.TransactionId);
-        
-              } catch (err) {
-                console.log("Tx result: ", err);
-              }
-            }
-
-        })();
+          const responseData = await contract.CreateCAHolder(caHolderObject);
+          console.log("Create CA transaction Id: ", responseData.TransactionId);
+        } catch (error) {
+          console.error('Create CA holder rrror:', error);
+        }
       }
 
       return token;
