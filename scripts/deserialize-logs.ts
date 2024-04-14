@@ -1,5 +1,5 @@
 // https://github.com/AElfProject/aelf-command/blob/master/src/utils/utils.js
-
+// @ts-ignore
 import AElf from "aelf-sdk";
 
 async function getProto(aelf: any, address: any) {
