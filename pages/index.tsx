@@ -70,7 +70,7 @@ export default function Home() {
             value={externalTransferObj.amount}
             onChange={(event) => setExternalTransferObj({...externalTransferObj, amount: event.target.value})}/>
             <Box className='btnContainer'>
-              <Button variant="contained"  disabled={isLoading} onClick={() => externalTransfer(externalTransferObj)} fullWidth>Transfer</Button>
+              <Button variant="contained" onClick={() => externalTransfer(externalTransferObj)} fullWidth>Transfer</Button>
             </Box>
           </Box>
           
