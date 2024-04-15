@@ -3,6 +3,7 @@ import AElf from 'aelf-sdk';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const ipAddress = "10.0.1.17"; //34.134.26.210
   let identifierHash: string = "217f047dbbf7b6233d427a811ac87ce13587ed66b9d8d1df10304f747e71ef65";
   let proof: string = "dd035f99330d5786b42537194346d69f1b4c2ce359b3191981d92451e5d90600736a41a5b2e104c7598f185deb60b4ae150050a3ddb11122a81bdcc10754211c9a8e0e56ebcc6547823aef5d407995601e5d480d0be7440bff95d31fe43b34045d70e8b844d1399e0cc86a09d8fece16e86714d903635ad6d4cebeea986f0b82";
   let publicKey: string = "dcd5f001235fffbfbd84e5832b2677f6a833fb297f9e9b88b018319e136813b5b241097e9ae6a33ec411745a8cf875ac0006d2fd6b4bae67f66914a68d7066f305c721e26372b66259e5274b27d92c3af5de3c5784dd2b0ef762644b0095a2ae87e8828300bfa577744ed5a969896fe45160bae4a2b4a4ce88347acf77926547745cdc6bf0f3820d0ed5946ff81f2ce1b0eee73b0822bcef8fcde90311b7282c8f7753cbb32995d81d24716168684a9e3b3db33d0f959bbb05ea6e65d1a7d4e3889532e86a84389e0ad8536fa9efa0e82dc19e93d5b8764d6957fc4063fcd3aad6ad63dd2748ab181860f846ac0beb1d152ac7de4c4cc4115f56cba3ebd53eed";
@@ -18,54 +19,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
 
   const createCAHolderAccount = async () => {
-    const httpProvider = 'http://34.134.26.210:8000';
-    const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
-    const contractAddress = "2LUmicHyH4RXrMjG4beDwuDsiWJESyLkgkwPdGTR8kahRzq5XS";
-    let contract;
+    const httpProvider = `http://${ipAddress}:8000`;
+    // const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
     const aelf = new AElf(new AElf.providers.HttpProvider(httpProvider));
-    const wallet = AElf.wallet.getWalletByPrivateKey(privateKey);
+    const wallet = AElf.wallet.createNewWallet();
     console.log("wallet: ", wallet);
-    // const wallet = AElf.wallet.createNewWallet();
-    // CREATING CA OBJECT
-    const caHolderObject = {
-      "guardianApproved": {
-        "identifierHash": identifierHash, // Will get from YM BE
-        "zkGuardianInfo": {
-            "identifierHash": identifierHash,// Will get from YM BE
-            "salt": salt, // STATIC RIGHT NOW
-            "issuerName": "Google", // STATIC RIGHT NOW
-            "issuerPubkey": publicKey,
-            "proof": proof // Will get from YM BE
-        }
-      },
-      "managerInfo": {
-        "address": wallet.address, // EOA Address
-        "extraData": ""
-      }
-    };
-    console.log("caHolderObject: ", caHolderObject);
-
     try {
-      // CREATE CONTRACT
-      contract = await aelf.chain.contractAt(contractAddress, wallet);
-
-      // CREATE CA HOLDER ACCOINT
-      const responseData = await contract.CreateCAHolder(caHolderObject);
-      console.log("Create CA response data: ", responseData.TransactionId);
+      const param = {
+        proof: proof,
+        identifierHash: identifierHash,
+        publicKey: publicKey,
+        managerAddress: wallet.address,
+        salt: salt
+      }
+      const response = await fetch(`http://${ipAddress}:7020/proof/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(param),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const responseAPIData = await response.json();
+        const caHash = responseAPIData.caCash;
+        const caAddress = responseAPIData.caAddress;
       await wait(10000);
-
-      // GET TRANSACTION RESULT
-      const transactionResponse = await aelf.chain.getTxResult(responseData.TransactionId);
-      console.log("transactionResponse: ", transactionResponse);
-
-      // GET HOLDER INFO
-      const responseCAHolderData = await contract.GetHolderInfo.call({
-        caHash: null,
-        loginGuardianIdentifierHash: identifierHash
-      });
-      const caHash = responseCAHolderData.caHash;
-      const caAddress = responseCAHolderData.caAddress;
-      console.log("responseCAHolderData: ", responseCAHolderData);
 
       // GET BALANCE INFO
       const tokenContractName = "AElf.ContractNames.Token";
@@ -84,9 +64,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         owner: caAddress
       });
       console.log("balanceResponse: ", balanceResponse);
-
       res.status(200).json({
-        transactionId: responseData.TransactionId,
+        transactionId: "dafnbi2ubrn21f",
         caHash: caHash,
         caAddress: caAddress,
         balance: balanceResponse.balance,
@@ -99,7 +78,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const response = await fetch("http://34.134.26.210:7020/proof/generate", {
+    const response = await fetch(`http://${ipAddress}:7020/proof/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +96,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       console.log("Proof generated successfully response: ", responseData);
       createCAHolderAccount();
   } catch (error) {
-      console.error('Proof generator rrror:', error);
+      console.error('Error:', error);
       res.status(405).json({ message: error });
   }
 }

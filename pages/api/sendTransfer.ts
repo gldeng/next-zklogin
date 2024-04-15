@@ -6,6 +6,7 @@ import { handleManagerForwardCall } from "@portkey/contracts";
 import { deserializeLogs } from '../../scripts/deserialize-logs'
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
+    const ipAddress = "10.0.1.17"; //34.134.26.210
 
     const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
     let { caHash, caAddress, toAddress, amount, wpk } = request.body;
@@ -16,7 +17,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
     console.log("wpk: ", wpk);
 
     // 8141ffd140742b3779a4651d9d14ddffab41bc758a690a6343859ff34723df79
-    const RPC_URL = "http://34.134.26.210:8000";
+    const RPC_URL = `http://${ipAddress}:8000`;
     const privateKey = wpk;
     const caContractAddress = "2LUmicHyH4RXrMjG4beDwuDsiWJESyLkgkwPdGTR8kahRzq5XS";
     
@@ -78,7 +79,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
                 owner: caAddress
                 });
             console.log("balanceResponse: ", balanceResponse);
-            
+            console.log("Number(balanceResponse.balance): ", balanceResponse.balance);
+            console.log("amount: ", Number(amount));
             response.status(200).json({transactionId: transactionResponse.TransactionId, balance: balanceResponse.balance});
         } catch (error) {
             console.log(error);
