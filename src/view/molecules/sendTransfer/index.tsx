@@ -31,24 +31,38 @@ const SendTransfer = ({
     amount: '12',
   });
   const {sendTransfer} = useTransfer(setLoading, setNotification);
+  const balance = "34902457";
 
   return (
-    <Paper elevation={3} className="box-container">
+    <Paper elevation={3} className="box-container wallet-box">
         <Box className="box-title">Transfer token</Box>
+        <Box display='flex' flex={1} mt={1} alignItems='center'>
+        <Box flex={1}>
+          <Box className='walletDetailsTitle'>{username}</Box>
+          <Box className='walletDetailsSubTitle'>Welcome back</Box>
+        </Box>
+      </Box>
+      {balance && <Box display='flex' alignItems='flex-end'>
+        <Box className='balance-big'>
+          {Number(balance || 0).toLocaleString('en-US')}
+        </Box>
+        <Box className='balance-icon'>
+          ELF
+        </Box>
+      </Box>}
         <Box mt={3}>
           <Box mt={2}/>
           <TextField label="To address" variant="outlined" size="small" fullWidth 
             value={state.toAddress} 
             onChange={(event) => setState({...state, toAddress: event.target.value})}/>
           <Box mt={2}/>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
             <TextField label="Amount" variant="outlined" size="small" fullWidth 
             value={state.amount}
             onChange={(event) => setState({...state, amount: event.target.value})}/>
-            <Box ml={0.5}><Image src={ELFTokenImage} alt="ELF Token" width={25} height={25} /></Box>
+            <Image src={ELFTokenImage} alt="ELF Token" width={25} height={25} className="icon-overlap"/>
           </Box>
           <Box className='btn-container'>
-            <Button variant="outlined" onClick={() => false} fullWidth>Clear</Button>
             <Button variant="contained" onClick={() => sendTransfer(state)} fullWidth>Transfer</Button>
           </Box>
         </Box>

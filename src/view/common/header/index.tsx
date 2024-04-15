@@ -35,7 +35,7 @@ const Header = ({
                 {localStorage.getItem("caHolderAddress") && <Chip className='chipBox' avatar={<WalletIcon color="primary" />} onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')} color="primary" label={localStorage.getItem("caHolderAddress") || ''} />}
                 <Button size="small" variant="contained" onClick={onlogout}>Disconnect</Button>
             </Box> : 
-            <Button  size="small" variant="contained" onClick={onlogin}>Connect</Button>}
+            <Button  size="small" variant="contained" onClick={onlogin}>Login</Button>}
         </Box>
     </Box>
   );

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from "react";
 import {Box, Button, Typography} from '@mui/material';
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,6 +16,8 @@ export default function Home() {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
+  const [isTransferOpen, setTransferOpen] = useState<boolean>(false);
+  const [hideBox, setHideBox] = useState<boolean>(true);
   const [balance, setBalance] = useState<number>(0);
   const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails);
   const userEmail = session?.user?.email || '';
@@ -29,9 +32,14 @@ export default function Home() {
     signOut();
   }
 
+  const toggleVisibility = () => {
+    setTransferOpen(!isTransferOpen);
+    setTimeout(() => setHideBox((prev) => !prev), 500);
+  };
+
   useEffect(() => {
     if (userEmail && !isProofGenerated) {
-      generateProof();
+      //generateProof();
       setProofGenerated(true);
     }
   }, [userEmail])
@@ -41,11 +49,8 @@ export default function Home() {
     <>
     <Header onlogin={login} onlogout={logout} userName={userName} email={userEmail} caHolderTranxId={caHolderTranxId}/>
     {status === "authenticated" ? 
-      <Box className='container' gap={4} flexDirection='column'>
-        <Box flex={1}>
-          <WalletDetails email={userEmail} username={userName} />
-        </Box>
-        <Box width={400} alignSelf='center'>
+      <Box className='container' gap={4} justifyContent='center'>
+        <Box width={400} className='animate'>
           <SendTransfer email={userEmail} username={userName} />
         </Box>
       </Box>
@@ -67,6 +72,10 @@ export default function Home() {
 }
 
 /**
+ * 
+<Box className={clsx('animate', isTransferOpen ? 'flip-card' : 'hide-card', 'overflow-box')} flex={1}>
+<SendTransfer email={userEmail} username={userName} />
+</Box>
  * <Box className='container' gap={2}>
       <Box flex={1}  mt={2}>
         <TransactionHistory email={userEmail} username={userName} />

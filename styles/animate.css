@@ -1,0 +1,24 @@
+.animate {
+    transition: 0.5s all linear;
+}
+.transfer-card {
+    transition: 0.5s all linear;
+}
+.flip-card {
+    opacity: 1;
+    transition: 0.5s all linear;
+    position: absolute;
+    top: 0;
+}
+.hide-card {
+    opacity: 0;
+    transition: 0.5s all linear;
+    top: -1000px;
+    position: absolute;
+}  
+.overflow-box {
+    overflow: hidden;
+    margin-top: -50px;
+    padding-top: 50px;
+    position: relative;
+}
