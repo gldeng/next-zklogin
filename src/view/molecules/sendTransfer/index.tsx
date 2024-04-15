@@ -31,7 +31,7 @@ const SendTransfer = ({
     amount: '12',
   });
   const {sendTransfer} = useTransfer(setLoading, setNotification);
-  const balance = "34902457";
+  const balance = localStorage.getItem("caHolderBalance");
 
   return (
     <Paper elevation={3} className="box-container wallet-box">

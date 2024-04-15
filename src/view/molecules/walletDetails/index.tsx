@@ -15,7 +15,7 @@ const WalletDetails = ({
 }: WalletDetailsProps) => {
   // DECLARE STATE
   const [isLoading, setLoading] = useState<boolean>(false);
-  const balance = "34902457";
+  const balance = localStorage.getItem("caHolderBalance");
 
   return (
     <Paper elevation={3} className="box-container">

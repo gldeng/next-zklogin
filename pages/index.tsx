@@ -39,7 +39,7 @@ export default function Home() {
 
   useEffect(() => {
     if (userEmail && !isProofGenerated) {
-      //generateProof();
+      generateProof();
       setProofGenerated(true);
     }
   }, [userEmail])
