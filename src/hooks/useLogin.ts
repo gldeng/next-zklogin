@@ -1,10 +1,11 @@
 import {Dispatch, SetStateAction} from 'react';
-import {ExternalTransferType, InternalTransferType} from '../types';
+import {ExternalTransferType, InternalTransferType, CAHolderDetailsType} from '../types';
 
 export default function useLogin(
     setLoading: Dispatch<SetStateAction<boolean>>,
     setCAHolderTranxId: Dispatch<SetStateAction<string>>,
     setInternalTransferObj: Dispatch<SetStateAction<InternalTransferType>>,
+    setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
 ) {
 
   const generateProof = async () => {
@@ -27,7 +28,12 @@ export default function useLogin(
         result = await response.json();
         console.log("Generat proof result: ", result);
         setCAHolderTranxId(result.transactionId);
+        setCAHolderDetails(result);
         localStorage.setItem("caHolderTranxId", result.transactionId);
+        localStorage.setItem("caHolderAddress", result.caAddress);
+        localStorage.setItem("caHolderHash", result.caHash);
+        localStorage.setItem("caHolderBalance", result.balance);
+        localStorage.setItem("wpk", result.wpk);
         console.log("Result: ", result);
       } catch (error) {
         console.error('Error:', error);
@@ -64,11 +70,13 @@ export default function useLogin(
   const externalTransfer  = async (externalTransferObj: ExternalTransferType) => {
     setLoading(true);
     try {
-      console.log("externalTransferObj: ", externalTransferObj);
       const param  = {
         ...externalTransferObj,
-        caTranxId: localStorage.getItem("caHolderTranxId")
+        caAddress: localStorage.getItem("caHolderAddress"),
+        caHash: localStorage.getItem("caHolderHash"),
+        wpk: localStorage.getItem("wpk")
       }
+      console.log("externalTransferObj: ", param);
       const response = await fetch('/api/externalTransfer', {
         method: 'POST',
         headers: {
@@ -81,7 +89,8 @@ export default function useLogin(
       }
       const result = await response.json();
       console.log("TransId: ", result);
-      alert("Successfully transfered and transaction id: IBJIDBCNO23HE1OE13IJB");
+      alert("Successfully transfered and transaction id: " + result.transactionId);
+      localStorage.setItem("caHolderBalance", result.balance);
     } catch (error) {
       console.error('Error:', error);
     } finally {

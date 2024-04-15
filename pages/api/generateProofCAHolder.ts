@@ -15,6 +15,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       salt: salt,
   }
 
+  const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
+
   const createCAHolderAccount = async () => {
     const httpProvider = 'http://34.134.26.210:8000';
     const privateKey = '1111111111111111111111111111111111111111111111111111111111111111';
@@ -22,6 +24,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let contract;
     const aelf = new AElf(new AElf.providers.HttpProvider(httpProvider));
     const wallet = AElf.wallet.getWalletByPrivateKey(privateKey);
+    console.log("wallet: ", wallet);
+    // const wallet = AElf.wallet.createNewWallet();
     // CREATING CA OBJECT
     const caHolderObject = {
       "guardianApproved": {
@@ -47,8 +51,47 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       // CREATE CA HOLDER ACCOINT
       const responseData = await contract.CreateCAHolder(caHolderObject);
-      console.log("Create CA response: ", responseData);
-      res.status(200).json({transactionId: responseData.TransactionId});
+      console.log("Create CA response data: ", responseData.TransactionId);
+      await wait(10000);
+
+      // GET TRANSACTION RESULT
+      const transactionResponse = await aelf.chain.getTxResult(responseData.TransactionId);
+      console.log("transactionResponse: ", transactionResponse);
+
+      // GET HOLDER INFO
+      const responseCAHolderData = await contract.GetHolderInfo.call({
+        caHash: null,
+        loginGuardianIdentifierHash: identifierHash
+      });
+      const caHash = responseCAHolderData.caHash;
+      const caAddress = responseCAHolderData.caAddress;
+      console.log("responseCAHolderData: ", responseCAHolderData);
+
+      // GET BALANCE INFO
+      const tokenContractName = "AElf.ContractNames.Token";
+      const chainStatus = await aelf.chain.getChainStatus();
+      const GenesisContractAddress = chainStatus.GenesisContractAddress;
+      const zeroContract = await aelf.chain.contractAt(
+        GenesisContractAddress,
+        wallet
+      );
+      const tokenContractAddress = await zeroContract.GetContractAddressByName.call(
+        AElf.utils.sha256(tokenContractName)
+      );
+      const tokenContract = await aelf.chain.contractAt(tokenContractAddress, wallet);
+      const balanceResponse = await tokenContract.GetBalance.call({
+        symbol: "ELF",
+        owner: caAddress
+      });
+      console.log("balanceResponse: ", balanceResponse);
+
+      res.status(200).json({
+        transactionId: responseData.TransactionId,
+        caHash: caHash,
+        caAddress: caAddress,
+        balance: balanceResponse.balance,
+        wpk: wallet.privateKey
+      });
     } catch (error) {
       console.error('Create CA holder rrror:', error);
       res.status(405).json({ message: error });

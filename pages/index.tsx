@@ -2,18 +2,20 @@ import { useEffect, useState } from "react";
 import {Box, Backdrop, CircularProgress, Button, Chip, Tabs, Tab, TextField} from '@mui/material';
 import { useSession, signIn, signOut } from "next-auth/react";
 import useLogin from '../src/hooks/useLogin';
-import {ExternalTransferType, InternalTransferType} from '../src/types';
+import {ExternalTransferType, InternalTransferType, CAHolderDetailsType} from '../src/types';
 import Header from '../src/view/common/header';
 
 export default function Home() {
   const { data: session, status } = useSession();
   const [caHolderTranxId, setCAHolderTranxId] = useState<string>('');
+  const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(0);
   const [selectedTab, setSelectedTab] = useState<string>('1');
   const [externalTransferObj, setExternalTransferObj] = useState<ExternalTransferType>({
-    caTranxId: caHolderTranxId,
+    caAddress: caHolderDetails.caAddress,
+    caHash: caHolderDetails.caHash,
     toAddress: '2d5VE47tFtaGuYdYd1qto8AXX33hQudZBPasB2u621JqFNwLep',
     amount: '12',
   });
@@ -21,7 +23,7 @@ export default function Home() {
     managerAddress: "",
     caHolderAddress:  "",
   });
-  const {generateProof, internalTransfer, externalTransfer} = useLogin(setLoading, setCAHolderTranxId, setInternalTransferObj);
+  const {generateProof, internalTransfer, externalTransfer} = useLogin(setLoading, setCAHolderTranxId, setInternalTransferObj, setCAHolderDetails);
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
 
@@ -48,17 +50,18 @@ export default function Home() {
       </Backdrop>
     )
   } */
-  
 
   return (
     <>
     <Header onlogin={login} onlogout={logout} userName={userName} email={userEmail} caHolderTranxId={caHolderTranxId}/>
     <Box className='walletBox'>
-      <Box className='walletBoxTitle'>zkLogin Wallet</Box>
+      <Box className='walletBoxTitle'>Transfer</Box>
       {(status === "authenticated") ? (
         <Box>
           <Box display={'flex'} gap={1}>
-            <Box flex={1} mb={2} textAlign='center'><Chip label={`Balance: ${balance} ELF`} /></Box>
+            <Box flex={1} mb={2} textAlign='center'>
+              {localStorage.getItem("caHolderBalance") && <Chip label={`Balance: ${localStorage.getItem("caHolderBalance")} ELF`} />}
+            </Box>
           </Box>
           <Box my={2}>
             <Box mt={2}/>
@@ -84,6 +87,9 @@ export default function Home() {
         </Box>
       )}
     </Box>
+    {isLoading && <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
+      <CircularProgress color="inherit" />
+    </Backdrop>}
     </>
   );
 }

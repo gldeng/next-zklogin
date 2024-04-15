@@ -31,7 +31,7 @@ const Header = ({
             {userName ? 
             <Box display='flex' gap={1} alignItems='center'>
                 <Box>{userName}</Box>
-                <Chip className='chipBox' avatar={<WalletIcon />} onClick={() => copyToClipboard(localStorage.getItem("caHolderTranxId") || '')} color="primary" label={localStorage.getItem("caHolderTranxId") || ''} />
+                {localStorage.getItem("caHolderAddress") && <Chip className='chipBox' avatar={<WalletIcon />} onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')} color="primary" label={localStorage.getItem("caHolderAddress") || ''} />}
                 <Button size="small" variant="contained" onClick={onlogout}>Disconnect</Button>
             </Box> : 
             <Button  size="small" variant="contained" onClick={onlogin}>Connect</Button>}

@@ -1,5 +1,6 @@
 export type ExternalTransferType = {
-    caTranxId: string;
+    caAddress: string;
+    caHash: string;
     toAddress: string;
     amount: string;
 }
@@ -7,4 +8,11 @@ export type ExternalTransferType = {
 export type InternalTransferType = {
     managerAddress: string;
     caHolderAddress: string;
+}
+
+export type CAHolderDetailsType = {
+    transactionId: string;
+    caHash: string;
+    caAddress: string;
+    balance: string;
 }
