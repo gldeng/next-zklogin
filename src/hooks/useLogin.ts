@@ -11,6 +11,9 @@ export default function useLogin(
       let result;
       setLoading(true);
       try {
+        // const mockTraxId = "8c798c1e7e033d78f68d73e9f49a2475e6df4c60c1ea693cbe8b0c9b9083408b";
+        // setCAHolderTranxId(mockTraxId);
+        // localStorage.setItem("caHolderTranxId", mockTraxId);
         const response = await fetch('/api/generateProofCAHolder', {
           method: 'POST',
           headers: {
@@ -62,12 +65,16 @@ export default function useLogin(
     setLoading(true);
     try {
       console.log("externalTransferObj: ", externalTransferObj);
+      const param  = {
+        ...externalTransferObj,
+        caTranxId: localStorage.getItem("caHolderTranxId")
+      }
       const response = await fetch('/api/externalTransfer', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({...externalTransferObj})
+        body: JSON.stringify({...param})
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
