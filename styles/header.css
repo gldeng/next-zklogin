@@ -10,6 +10,7 @@
     right: 0;
     box-shadow: 1px 1px 2px #094aa5;
     display: flex;
+    z-index: 2
 }
 .logoContainer {
   display: inline-flex;

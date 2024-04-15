@@ -1,7 +1,8 @@
 import { useState } from "react";
+import Image from 'next/image';
 import {Box, Chip, Button} from '@mui/material';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
 import WalletIcon from '@mui/icons-material/Wallet';
+import ELFLogoLightImage from '@/image/aelf-logo-light.png';
 
 type HeaderType = {
     onlogin: (event: any) => void;
@@ -26,12 +27,12 @@ const Header = ({
 
   return (
     <Box className='header'>
-        <Box className='logoContainer'><AcUnitIcon/>zkLogin</Box>
+        <Box className='logoContainer'><Image src={ELFLogoLightImage} alt="ELF Logo" width={25} height={25} />zkLogin</Box>
         <Box className='addressContainer'>
             {userName ? 
             <Box display='flex' gap={1} alignItems='center'>
                 <Box>{userName}</Box>
-                {localStorage.getItem("caHolderAddress") && <Chip className='chipBox' avatar={<WalletIcon />} onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')} color="primary" label={localStorage.getItem("caHolderAddress") || ''} />}
+                {localStorage.getItem("caHolderAddress") && <Chip className='chipBox' avatar={<WalletIcon color="primary" />} onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')} color="primary" label={localStorage.getItem("caHolderAddress") || ''} />}
                 <Button size="small" variant="contained" onClick={onlogout}>Disconnect</Button>
             </Box> : 
             <Button  size="small" variant="contained" onClick={onlogin}>Connect</Button>}

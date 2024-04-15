@@ -1,10 +1,9 @@
 import {Dispatch, SetStateAction} from 'react';
-import {ExternalTransferType, InternalTransferType, CAHolderDetailsType} from '../types';
+import {CAHolderDetailsType} from '../types';
 
 export default function useLogin(
     setLoading: Dispatch<SetStateAction<boolean>>,
     setCAHolderTranxId: Dispatch<SetStateAction<string>>,
-    setInternalTransferObj: Dispatch<SetStateAction<InternalTransferType>>,
     setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
 ) {
 
@@ -43,64 +42,7 @@ export default function useLogin(
       return result;
   }
 
-  const internalTransfer = async (internalTransferObj: InternalTransferType) => {
-    console.log("Internal transfer");
-    setLoading(true);
-    try {
-      const response = await fetch('/api/internalTransfer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({...internalTransferObj})
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const result = await response.json();
-      console.log("Internal TransId: ", result);
-      alert("Successfully transfered and transaction id: IBJIDBCNO23HE1OE13IJB");
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-        setLoading(false);
-    }
-  }
-
-  const externalTransfer  = async (externalTransferObj: ExternalTransferType) => {
-    setLoading(true);
-    try {
-      const param  = {
-        ...externalTransferObj,
-        caAddress: localStorage.getItem("caHolderAddress"),
-        caHash: localStorage.getItem("caHolderHash"),
-        wpk: localStorage.getItem("wpk")
-      }
-      console.log("externalTransferObj: ", param);
-      const response = await fetch('/api/externalTransfer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({...param})
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const result = await response.json();
-      console.log("TransId: ", result);
-      alert("Successfully transfered and transaction id: " + result.transactionId);
-      localStorage.setItem("caHolderBalance", result.balance);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-        setLoading(false);
-    }
-  }
-
     return {
         generateProof,
-        internalTransfer,
-        externalTransfer,
     }
 }

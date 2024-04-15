@@ -13,7 +13,12 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/atoms": ["./src/view/atoms"],
+      "@/molecules": ["./src/view/molecules"],
+      "@/types": ["./src/types"],
+      "@/hooks": ["./src/hooks"],
+      "@/image/*": ["./src/assets/image/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
