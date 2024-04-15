@@ -99,7 +99,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const response = await fetch("http://34.134.26.210:7020/proof/generate-mock", {
+    const response = await fetch("http://34.134.26.210:7020/proof/generate", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
