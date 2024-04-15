@@ -24,7 +24,7 @@ export default function Home() {
   const userEmail = session?.user?.email || '';
 
   const login = async () => {
-    const data = await signIn("google", { scope: "openid profile email" });
+    const data = await signIn("google");
     console.log("data: ", data);
     generateProof();
   }
