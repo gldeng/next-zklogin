@@ -23,11 +23,16 @@ export default function Home() {
     message: '',
     type: 'success'
   });
+
+  const logout = () => {
+    localStorage.clear();
+    signOut();
+  }
   const [caHolderTranxId, setCAHolderTranxId] = useState<string>('');
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
-  const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails, setNotification);
+  const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails, setNotification, logout);
   const userData = session?.user as UserType;
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
@@ -35,11 +40,6 @@ export default function Home() {
 
   const login =  async (event: any) => {
     await signIn("google");
-  }
-
-  const logout = () => {
-    localStorage.clear();
-    signOut();
   }
 
   useEffect(() => {

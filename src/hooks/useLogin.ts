@@ -6,6 +6,7 @@ export default function useLogin(
     setCAHolderTranxId: Dispatch<SetStateAction<string>>,
     setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
     setNotification: Dispatch<SetStateAction<NotificationType>>,
+    logout: () => void
 ) {
 
   const generateProof = async (idToken: string) => {
@@ -24,6 +25,7 @@ export default function useLogin(
         });
         if (!response.ok) {
           setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
+          logout();
           throw new Error('Network response was not ok');
         }
         result = await response.json();
