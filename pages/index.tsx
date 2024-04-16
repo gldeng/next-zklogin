@@ -9,19 +9,24 @@ import {SendTransfer} from '@/molecules';
 import useLogin from '../src/hooks/useLogin';
 import Header from '../src/view/common/header';
 
+type UserType = {
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+  idToken?: string | null | undefined; // Add idToken property
+}
+
 export default function Home() {
   const { data: session, status } = useSession();
   const [caHolderTranxId, setCAHolderTranxId] = useState<string>('');
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
-  const [isTransferOpen, setTransferOpen] = useState<boolean>(false);
-  const [hideBox, setHideBox] = useState<boolean>(true);
-  const [balance, setBalance] = useState<number>(0);
   const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails);
+  const userData = session?.user as UserType;
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
-  const idToken = session?.user?.idToken || '';
+  const idToken = userData?.idToken || '';
 
   const login =  async (event: any) => {
     await signIn("google");
@@ -64,15 +69,3 @@ export default function Home() {
     </>
   );
 }
-
-/**
- * 
-<Box className={clsx('animate', isTransferOpen ? 'flip-card' : 'hide-card', 'overflow-box')} flex={1}>
-<SendTransfer email={userEmail} username={userName} />
-</Box>
- * <Box className='container' gap={2}>
-      <Box flex={1}  mt={2}>
-        <TransactionHistory email={userEmail} username={userName} />
-      </Box>
-    </Box>
- */
