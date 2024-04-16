@@ -36,6 +36,7 @@ export default function useLogin(
         localStorage.setItem("caHolderAddress", result.caAddress);
         localStorage.setItem("caHolderHash", result.caHash);
         localStorage.setItem("caHolderBalance", result.balance);
+        // localStorage.setItem("caHolderBalance", "0");
         localStorage.setItem("wpk", result.wpk);
         console.log("Result: ", result);
       } catch (error) {

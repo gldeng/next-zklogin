@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import Image from 'next/image';
 import {Box, Chip, Button} from '@mui/material';
 import WalletIcon from '@mui/icons-material/Wallet';
 import ELFLogoLightImage from '@/image/aelf-logo-light.png';
+import {NotificationType} from '@/types';
 
 type HeaderType = {
     onlogin: (event: any) => void;
@@ -10,6 +11,7 @@ type HeaderType = {
     email: string;
     caHolderTranxId:  string;
     userName: string;
+    setNotification: Dispatch<SetStateAction<NotificationType>>,
 }
 
 const Header = ({
@@ -18,11 +20,13 @@ const Header = ({
     email = '',
     caHolderTranxId,
     userName,
+    setNotification,
 }: HeaderType) => {
   const [state, setState] = useState<string>(caHolderTranxId);
 
   const copyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
+    setNotification({isOpen: true, message: 'Copied', type: 'success' });
 };
 
   return (

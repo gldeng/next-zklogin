@@ -14,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       jwt: id_token, 
       salt: salt,
   }
+  console.log("id_token: ", id_token);
 
   const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
 
@@ -76,6 +77,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
+    console.log("Generate proof param: ", param);
     const response = await fetch(`http://${ipAddress}:7020/proof/generate`, {
         method: 'POST',
         headers: {
@@ -88,6 +90,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       
       const responseData = await response.json();
+      console.log("responseData: ", responseData);
       proof = responseData.proof;
       identifierHash = responseData.identifierHash;
       publicKey = responseData.publicKey;

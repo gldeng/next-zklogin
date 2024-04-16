@@ -59,7 +59,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
             instance: aelf,
             functionName: "Transfer",
         });
-        console.log("Manager handleManagerForwardCall params: ", params);
+        // console.log("Manager handleManagerForwardCall params: ", params);
 
         const res = await caContract.ManagerForwardCall({
             caHash,
@@ -68,19 +68,18 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
             args: params.args,
         });
         wait(10000);
-        console.log("CA ManagerForwardCall response: ", res);
+        // console.log("CA ManagerForwardCall response: ", res);
 
         try {
             const transactionResponse = await aelf.chain.getTxResult(res.TransactionId);
-            console.log("getTxResult response: ", transactionResponse.TransactionId);
-            wait(10000);
+            // console.log("getTxResult response: ", transactionResponse.TransactionId);
             const balanceResponse = await tokenContract.GetBalance.call({
                 symbol: "ELF",
                 owner: caAddress
                 });
-            console.log("balanceResponse: ", balanceResponse);
-            console.log("Number(balanceResponse.balance): ", balanceResponse.balance);
-            console.log("amount: ", Number(amount));
+            console.log("Main balance: ", balanceResponse.balance);
+            console.log("Amount sent: ", amount);
+            console.log("Balance after : ", balanceResponse.balance - amount);
             response.status(200).json({transactionId: transactionResponse.TransactionId, balance: balanceResponse.balance});
         } catch (error) {
             console.log(error);

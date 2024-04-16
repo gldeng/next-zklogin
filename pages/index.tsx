@@ -7,6 +7,7 @@ import {CAHolderDetailsType, NotificationType} from '@/types';
 import {SendTransfer} from '@/molecules';
 
 import useLogin from '../src/hooks/useLogin';
+import useCommon from '../src/hooks/useCommon';
 import Header from '../src/view/common/header';
 
 type UserType = {
@@ -33,6 +34,7 @@ export default function Home() {
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
   const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails, setNotification, logout);
+  const {getBalance} = useCommon(setLoading);
   const userData = session?.user as UserType;
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
@@ -43,7 +45,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (userEmail && !isProofGenerated) {
+    const caHolderTranxId = localStorage.getItem("caHolderTranxId") || '';
+    if (userEmail && !isProofGenerated && !caHolderTranxId) {
       generateProof(idToken);
       setProofGenerated(true);
     }
@@ -51,7 +54,7 @@ export default function Home() {
 
   return (
     <>
-    <Header onlogin={login} onlogout={logout} userName={userName} email={userEmail} caHolderTranxId={caHolderTranxId}/>
+    <Header onlogin={login} onlogout={logout} userName={userName} email={userEmail} caHolderTranxId={caHolderTranxId} setNotification={setNotification}/>
     {status === "authenticated" ? 
       <Box className='container' gap={4} justifyContent='center'>
         <Box width={400} className='animate'>
