@@ -7,7 +7,7 @@ export default function useLogin(
     setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
 ) {
 
-  const generateProof = async () => {
+  const generateProof = async (idToken: string) => {
       let result;
       setLoading(true);
       try {
@@ -19,7 +19,7 @@ export default function useLogin(
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({token: 'SODH28UGD28'})
+          body: JSON.stringify({token: idToken})
         });
         if (!response.ok) {
           throw new Error('Network response was not ok');

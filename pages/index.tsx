@@ -1,11 +1,10 @@
-import clsx from 'clsx';
 import { useEffect, useState } from "react";
 import {Box, Button, Typography} from '@mui/material';
 import { useSession, signIn, signOut } from "next-auth/react";
 
 import {Loader} from '@/atoms';
 import {CAHolderDetailsType} from '@/types';
-import {WalletDetails, TransactionHistory, SendTransfer} from '@/molecules';
+import {SendTransfer} from '@/molecules';
 
 import useLogin from '../src/hooks/useLogin';
 import Header from '../src/view/common/header';
@@ -22,6 +21,7 @@ export default function Home() {
   const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails);
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
+  const idToken = session?.user?.idToken || '';
 
   const login =  async (event: any) => {
     await signIn("google");
@@ -32,18 +32,12 @@ export default function Home() {
     signOut();
   }
 
-  const toggleVisibility = () => {
-    setTransferOpen(!isTransferOpen);
-    setTimeout(() => setHideBox((prev) => !prev), 500);
-  };
-
   useEffect(() => {
     if (userEmail && !isProofGenerated) {
-      generateProof();
+      generateProof(idToken);
       setProofGenerated(true);
     }
-  }, [userEmail])
-
+  }, [userEmail]);
 
   return (
     <>

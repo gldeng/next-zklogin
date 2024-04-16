@@ -9,13 +9,21 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account }) {
       if (account) {
-        const { id_token } = account;
-        const jwt = id_token;
+        token.idToken = account.id_token;
       }
 
       return token;
+    },
+    async session({ session, token }) {
+      // Add the token to the session
+      if (token && session?.['user']) {
+        const idToken = token?.idToken as string;
+        const outputObject = {...session.user, idToken: idToken};
+        session.user = outputObject;
+      }
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
