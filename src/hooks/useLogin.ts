@@ -1,10 +1,11 @@
 import {Dispatch, SetStateAction} from 'react';
-import {CAHolderDetailsType} from '../types';
+import {CAHolderDetailsType, NotificationType} from '../types';
 
 export default function useLogin(
     setLoading: Dispatch<SetStateAction<boolean>>,
     setCAHolderTranxId: Dispatch<SetStateAction<string>>,
     setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
+    setNotification: Dispatch<SetStateAction<NotificationType>>,
 ) {
 
   const generateProof = async (idToken: string) => {
@@ -22,6 +23,7 @@ export default function useLogin(
           body: JSON.stringify({token: idToken})
         });
         if (!response.ok) {
+          setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
           throw new Error('Network response was not ok');
         }
         result = await response.json();
@@ -35,6 +37,7 @@ export default function useLogin(
         localStorage.setItem("wpk", result.wpk);
         console.log("Result: ", result);
       } catch (error) {
+        setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
         console.error('Error:', error);
       } finally {
           setLoading(false);

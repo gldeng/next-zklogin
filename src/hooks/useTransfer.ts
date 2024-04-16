@@ -23,6 +23,7 @@ export default function useLogin(
                 body: JSON.stringify({...param})
             });
             if (!response.ok) {
+                setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
                 throw new Error('Network response was not ok');
             }
             const result = await response.json();

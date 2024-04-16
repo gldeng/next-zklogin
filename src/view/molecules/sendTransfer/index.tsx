@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import Image from 'next/image';
 import {Box, Paper, TextField, Button, Snackbar, Alert} from '@mui/material';
 
@@ -10,19 +10,16 @@ import ELFTokenImage from '@/image/elf-token.png';
 type SendTransferProps = {
     email: string;
     username: string;
+    setNotification: Dispatch<SetStateAction<NotificationType>>,
 };
 
 const SendTransfer = ({
     email,
     username,
+    setNotification,
 }: SendTransferProps) => {
   // DECLARE STATE
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [notification, setNotification] = useState<NotificationType>({
-    isOpen: false,
-    message: '',
-    type: 'success'
-  });
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
   const [state, setState] = useState<SendTransferType>({
     caAddress: caHolderDetails.caAddress,
@@ -67,16 +64,6 @@ const SendTransfer = ({
           </Box>
         </Box>
     {isLoading && <Loader/>}
-    <Snackbar open={notification.isOpen} autoHideDuration={6000} onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}>
-      <Alert
-        onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}
-        severity={notification.type}
-        variant="filled"
-        sx={{ width: '100%' }}
-      >
-        {notification.message}
-      </Alert>
-    </Snackbar>
     </Paper>
   );
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import {Box, Button, Typography} from '@mui/material';
+import {Box, Button, Typography, Snackbar, Alert} from '@mui/material';
 import { useSession, signIn, signOut } from "next-auth/react";
 
 import {Loader} from '@/atoms';
-import {CAHolderDetailsType} from '@/types';
+import {CAHolderDetailsType, NotificationType} from '@/types';
 import {SendTransfer} from '@/molecules';
 
 import useLogin from '../src/hooks/useLogin';
@@ -18,11 +18,16 @@ type UserType = {
 
 export default function Home() {
   const { data: session, status } = useSession();
+  const [notification, setNotification] = useState<NotificationType>({
+    isOpen: false,
+    message: '',
+    type: 'success'
+  });
   const [caHolderTranxId, setCAHolderTranxId] = useState<string>('');
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isProofGenerated, setProofGenerated] = useState<boolean>(false);
   const [caHolderDetails, setCAHolderDetails] = useState<CAHolderDetailsType>({} as CAHolderDetailsType);
-  const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails);
+  const {generateProof} = useLogin(setLoading, setCAHolderTranxId, setCAHolderDetails, setNotification);
   const userData = session?.user as UserType;
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
@@ -50,7 +55,7 @@ export default function Home() {
     {status === "authenticated" ? 
       <Box className='container' gap={4} justifyContent='center'>
         <Box width={400} className='animate'>
-          <SendTransfer email={userEmail} username={userName} />
+          <SendTransfer email={userEmail} username={userName} setNotification={setNotification}/>
         </Box>
       </Box>
     :
@@ -66,6 +71,16 @@ export default function Home() {
       </Box>
     }
     {isLoading && <Loader/>}
+    <Snackbar open={notification.isOpen} autoHideDuration={6000} onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}>
+      <Alert
+        onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}
+        severity={notification.type}
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        {notification.message}
+      </Alert>
+    </Snackbar>
     </>
   );
 }
