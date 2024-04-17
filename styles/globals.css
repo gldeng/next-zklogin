@@ -90,8 +90,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   font-size: 15px;
-  background: #fff;
-  margin-top: 38px
+  background: #1876d2;
 }
 
 a {
@@ -107,5 +106,20 @@ a {
   cursor: pointer;
 }
 #__next {
-  height: 100vh;
+  max-width: 375px;  
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px #00386e;
+}
+
+@media (max-width: 480px) {
+  /* CSS styles specific to smaller mobile devices */
+
+  #__next {
+    height: 100vh;
+    border: none;
+    margin: 0;
+    background-color: #fff;
+    box-shadow: none;
+  }
 }
