@@ -1,13 +1,19 @@
 import {Dispatch, SetStateAction} from 'react';
-import {SendTransferType, NotificationType} from '../types';
+import {SendTransferType, NotificationType} from '@/types';
+import {useCommon} from '@/hooks';
 
-export default function useLogin(
+export default function useTransfer(
     setLoading: Dispatch<SetStateAction<boolean>>,
     setNotification: Dispatch<SetStateAction<NotificationType>>,
 ) {
-
+    const {getBalance} = useCommon(setLoading);
     const sendTransfer  = async (sendTransferObj: SendTransferType) => {
         setLoading(true);
+        const availableBalance = Number(localStorage.getItem("caHolderBalance"));
+        if (availableBalance < Number(sendTransferObj.amount)) {
+            setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
+            throw new Error('Available balance is less than provided amount.');
+        }
         try {
             const param  = {
                 ...sendTransferObj,
@@ -28,11 +34,11 @@ export default function useLogin(
             }
             const result = await response.json();
             localStorage.setItem("caHolderBalance", result.balance);
-            setNotification({isOpen: true, message: `Transferred successfully and transaction Id is ${result.transactionId}`, type: 'success' })
+            setNotification({isOpen: true, message: `Transferred successfully and transaction Id is ${result.transactionId}`, type: 'success' });
+            getBalance();
         } catch (error) {
             console.error('Error:', error);
-            setNotification({isOpen: true, message: error as string, type: 'error' })
-        } finally {
+            setNotification({isOpen: true, message: error as string, type: 'error' });
             setLoading(false);
         }
     }

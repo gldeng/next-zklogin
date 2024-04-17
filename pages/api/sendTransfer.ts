@@ -6,7 +6,7 @@ import { handleManagerForwardCall } from "@portkey/contracts";
 import { deserializeLogs } from '../../scripts/deserialize-logs'
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
-    const ipAddress = "10.0.1.17"; //34.134.26.210
+    const ipAddress = "35.224.187.249"; //34.134.26.210 10.0.1.17
 
     const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
     let { caHash, caAddress, toAddress, amount, wpk } = request.body;
@@ -52,7 +52,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
             args: {
                 to: toAddress,
                 symbol: "ELF",
-                amount,
+                amount: Number(amount) * 100000000,
                 memo: "ca transfer",
             },
             },

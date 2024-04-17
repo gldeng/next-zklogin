@@ -28,7 +28,7 @@ const SendTransfer = ({
     amount: '12',
   });
   const {sendTransfer} = useTransfer(setLoading, setNotification);
-  const balance = localStorage.getItem("caHolderBalance");
+  const balance = ((Number(localStorage.getItem("caHolderBalance"))/100000000 || 0).toFixed(8)).toString();
 
   return (
     <Paper elevation={3} className="box-container wallet-box">
@@ -41,7 +41,7 @@ const SendTransfer = ({
       </Box>
       {balance && <Box display='flex' alignItems='flex-end'>
         <Box className='balance-big'>
-          {Number(balance || 0).toLocaleString('en-US')}
+          {(balance || 0).toLocaleString('en-US')}
         </Box>
         <Box className='balance-icon'>
           ELF

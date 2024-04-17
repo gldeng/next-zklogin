@@ -49,6 +49,8 @@ export default function Home() {
     if (userEmail && !isProofGenerated && !caHolderTranxId) {
       generateProof(idToken);
       setProofGenerated(true);
+    } else if (caHolderTranxId) {
+      getBalance();
     }
   }, [userEmail]);
 
