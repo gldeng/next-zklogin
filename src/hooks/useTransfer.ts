@@ -1,14 +1,14 @@
 import {Dispatch, SetStateAction} from 'react';
-import {SendTransferType, NotificationType} from '@/types';
+import {SendTransferType, NotificationType, LoadingType} from '@/types';
 import {useCommon} from '@/hooks';
 
 export default function useTransfer(
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    setLoading: Dispatch<SetStateAction<LoadingType>>,
     setNotification: Dispatch<SetStateAction<NotificationType>>,
 ) {
     const {getBalance} = useCommon(setLoading);
     const sendTransfer  = async (sendTransferObj: SendTransferType) => {
-        setLoading(true);
+        setLoading({isLoading: true, message: 'Transfer in progress...'});
         const availableBalance = Number(localStorage.getItem("caHolderBalance"));
         if (availableBalance < Number(sendTransferObj.amount)) {
             setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
@@ -39,7 +39,7 @@ export default function useTransfer(
         } catch (error) {
             console.error('Error:', error);
             setNotification({isOpen: true, message: error as string, type: 'error' });
-            setLoading(false);
+            setLoading({isLoading: false, message: ''});
         }
     }
 

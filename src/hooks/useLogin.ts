@@ -1,8 +1,8 @@
 import {Dispatch, SetStateAction} from 'react';
-import {CAHolderDetailsType, NotificationType} from '../types';
+import {CAHolderDetailsType, NotificationType, LoadingType} from '../types';
 
 export default function useLogin(
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    setLoading: Dispatch<SetStateAction<LoadingType>>,
     setCAHolderTranxId: Dispatch<SetStateAction<string>>,
     setCAHolderDetails: Dispatch<SetStateAction<CAHolderDetailsType>>,
     setNotification: Dispatch<SetStateAction<NotificationType>>,
@@ -11,7 +11,7 @@ export default function useLogin(
 
   const generateProof = async (idToken: string) => {
       let result;
-      setLoading(true);
+      setLoading({isLoading: true, message: 'Please wait, it will take take around 1 minutes as we fetching proof and creating CA holder account.'});
       try {
         // const mockTraxId = "8c798c1e7e033d78f68d73e9f49a2475e6df4c60c1ea693cbe8b0c9b9083408b";
         // setCAHolderTranxId(mockTraxId);
@@ -43,7 +43,7 @@ export default function useLogin(
         setNotification({isOpen: true, message: 'Something went wrong. Please try again.', type: 'error' });
         console.error('Error:', error);
       } finally {
-          setLoading(false);
+          setLoading({isLoading: false, message: ''});
       }
       return result;
   }

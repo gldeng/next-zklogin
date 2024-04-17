@@ -1,12 +1,13 @@
 import {Dispatch, SetStateAction} from 'react';
+import {LoadingType} from '@/types';
 
 export default function useCommon(
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    setLoading: Dispatch<SetStateAction<LoadingType>>,
 ) {
 
   const getBalance = async () => {
       let result;
-      setLoading(true);
+      setLoading({isLoading: true, message: 'Loading. Please wait...'});
       try {
         const param  = {
           caAddress: localStorage.getItem("caHolderAddress"),
@@ -28,7 +29,7 @@ export default function useCommon(
       } catch (error) {
         console.error('Error:', error);
       } finally {
-          setLoading(false);
+          setLoading({isLoading: false, message: ''});
       }
       return result;
   }

@@ -7,12 +7,18 @@
  */
 // GENERIC IMPORT
 import React from 'react';
-import {Backdrop, CircularProgress} from '@mui/material';
+import {Backdrop, CircularProgress, Box} from '@mui/material';
 
-const Loader = () => {
+type LoaderProps = {
+    message?: string
+}
+const Loader = ({
+    message
+}: LoaderProps) => {
     return (
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
-            <CircularProgress color="inherit" />
+        <Backdrop style={{display: 'flex', flexDirection: 'column'}} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
+            <CircularProgress color="inherit" /><br/>
+            {message && <Box style={{display: 'block', width: '400px', textAlign: 'center'}}>{message}</Box>}
         </Backdrop>
     )
 };

@@ -18,7 +18,9 @@
       "@/molecules": ["./src/view/molecules"],
       "@/types": ["./src/types"],
       "@/hooks": ["./src/hooks"],
-      "@/image/*": ["./src/assets/image/*"]
+      "@/image/*": ["./src/assets/image/*"],
+      "@/utils": ["./src/utils"],
+      "@/utils/*": ["./src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

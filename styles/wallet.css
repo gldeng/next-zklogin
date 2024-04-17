@@ -38,13 +38,9 @@
   margin-top: 16px;
 }
 .walletBox {
-  border: 2px solid #256dd3;
   transition: 0.5s all linear;
-  background-color: #fff;
-  border-radius: 8px;
   padding: 16px;
-  margin: 10% auto 16px auto;
-  width: 400px;
+  width: 300px;
   box-sizing: border-box;
   color: #2c3e50;
   font-size: 12px;
@@ -79,4 +75,106 @@
 }
 .wallet-box {
   margin-top: 30%
+}
+.title-h1 {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.circle-list {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  justify-content: space-between;
+}
+.circle-item {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.circle-icon {
+  background: #0f5dcb;
+  width: 35px;
+  height: 35px;
+  border-radius: 100px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+.circle-label {
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+.line {
+  border: 0.5px solid #ececec;
+}
+.box {
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  padding: 6px;
+  box-shadow: 1px 1px 1px #f8f8f8;
+}
+.crypto-list {
+  display: flex;
+  flex: 1;
+}
+.crypto-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1
+}
+.crypto-icon {
+  width: 30px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.circle-icon-disabled {
+  background-color: #6c93cb;
+  cursor: none;
+}
+.circle-icon-active {
+  background-color: #1f7cff;
+  box-shadow: 1px 1px 2px #939393;
+}
+.crypto-label {
+  width: 100px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 600;
+  padding-left: 4px;
+}
+.circle-label-disabled {
+  color: #a6a6a6;
+  cursor: none;
+}
+.circle-label-active {
+  font-weight: 600;
+}
+.crypto-value {
+  flex: 1;
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.page-title {
+  font-size: 19px;
+  font-weight: 600;
+  display: flex;
+  flex: 1;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.app-login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -90px;
+  flex: 1
 }

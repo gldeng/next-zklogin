@@ -81,6 +81,7 @@
 
 html,
 body {
+  height: 100vh;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -89,8 +90,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   font-size: 15px;
-  background: #256dd3;
-  margin-top: 60px
+  background: #fff;
+  margin-top: 38px
 }
 
 a {
@@ -100,4 +101,11 @@ a {
 
 .MuiButtonBase-root {
   font-weight: 600 !important;
+}
+.copy-icon {
+  width: 18px;
+  cursor: pointer;
+}
+#__next {
+  height: 100vh;
 }

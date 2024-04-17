@@ -17,3 +17,8 @@ export type NotificationType = {
     message: string;
     type: 'success' | 'error'
 }
+
+export type LoadingType = {
+    isLoading:  boolean;
+    message: string;
+}

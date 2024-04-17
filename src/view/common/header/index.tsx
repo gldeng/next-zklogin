@@ -3,6 +3,8 @@ import Image from 'next/image';
 import {Box, Chip, Button} from '@mui/material';
 import WalletIcon from '@mui/icons-material/Wallet';
 import ELFLogoLightImage from '@/image/aelf-logo-light.png';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import {NotificationType} from '@/types';
 
 type HeaderType = {
@@ -31,15 +33,13 @@ const Header = ({
 
   return (
     <Box className='header'>
-        <Box className='logoContainer'><Image src={ELFLogoLightImage} alt="ELF Logo" width={25} height={25} />zkLogin</Box>
+        <Box className='logoContainer'><Image src={ELFLogoLightImage} alt="ELF Logo" width={25} height={25} />zkLogin wallet</Box>
         <Box className='addressContainer'>
-            {userName ? 
-            <Box display='flex' gap={1} alignItems='center'>
-                <Box>{userName}</Box>
-                {localStorage.getItem("caHolderAddress") && <Chip className='chipBox' avatar={<WalletIcon color="primary" />} onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')} color="primary" label={localStorage.getItem("caHolderAddress") || ''} />}
-                <Button size="small" variant="contained" onClick={onlogout}>Disconnect</Button>
-            </Box> : 
-            <Button  size="small" variant="contained" onClick={onlogin}>Login</Button>}
+            {userName &&
+            <Box display='flex' gap={1.5} alignItems='center'>
+                {localStorage.getItem("caHolderAddress") && <ContentCopyIcon className="copy-icon" onClick={() => copyToClipboard(localStorage.getItem("caHolderAddress") || '')}/>}
+                <PowerSettingsNewIcon onClick={onlogout}/>
+            </Box>}
         </Box>
     </Box>
   );
