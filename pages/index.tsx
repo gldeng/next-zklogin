@@ -58,6 +58,7 @@ export default function Home() {
     } else if (caHolderTranxId) {
       getBalance();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userEmail]);
 
   return (
