@@ -32,7 +32,7 @@ const ShortMenu = ({
             isEnable: true,
             value: 'receive'
         },
-        {
+        /* {
             id: 3,
             label: 'Buy',
             icon: <AddIcon/>,
@@ -52,7 +52,7 @@ const ShortMenu = ({
             icon: <SwapCallsIcon/>,
             isEnable: false,
             value: 'bridge'
-        },
+        }, */
     ]
 
     const handlePageSelect = (value: string, isEnabled: boolean) => {

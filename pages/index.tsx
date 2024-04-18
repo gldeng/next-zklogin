@@ -44,7 +44,7 @@ export default function Home() {
   const userEmail = session?.user?.email || '';
   const userName = session?.user?.name || '';
   const idToken = userData?.idToken || '';
-  const balance = ((Number(localStorage.getItem("caHolderBalance"))/100000000 || 0).toFixed(8)).toString();
+  const balance = (typeof window !== 'undefined') ? ((Number(localStorage.getItem("caHolderBalance"))/100000000 || 0).toFixed(8)).toString() : 0;
 
   const login =  async (event: any) => {
     await signIn("google");
@@ -65,7 +65,7 @@ export default function Home() {
     <>
     <Header onlogin={login} onlogout={logout} userName={userName} email={userEmail} caHolderTranxId={caHolderTranxId} setNotification={setNotification}/>
     {status === "authenticated" ? <Box>
-      <Box className='title-h1' mx={2}>{(Number(balance) * 0.62 || 0).toLocaleString('en-US', {style:"currency", currency:"USD"})}</Box>
+      <Box className='title-h1' mx={2} mt={2}>{(Number(balance) * 0.62 || 0).toLocaleString('en-US', {style:"currency", currency:"USD"})}</Box>
       <ShortMenu setSelectedPage={setSelectedPage} selectedPage={selectedPage}/>
       <Box className="line"/>
       {selectedPage === "table" && 
@@ -106,6 +106,7 @@ export default function Home() {
       </Box>
     </Box>
     }
+    {isLoading.isLoading && <Loader message={isLoading.message}/>}
     <Snackbar open={notification.isOpen} autoHideDuration={15000} onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}>
       <Alert
         onClose={() => setNotification({isOpen: false, message: '', type: 'success'})}

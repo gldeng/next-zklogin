@@ -77,14 +77,16 @@
   margin-top: 30%
 }
 .title-h1 {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 600;
   margin-bottom: 8px;
+  text-align: center;
 }
 .circle-list {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  justify-content: space-between;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 48px
 }
 .circle-item {
   display: inline-flex;

@@ -12,7 +12,7 @@ const CryptoTable = ({
     selectedPage,
 }: CryptoTableProps) => {
     // DECLARE STATE
-    const balance = ((Number(localStorage.getItem("caHolderBalance"))/100000000 || 0).toFixed(8)).toString();
+    const balance = (typeof window !== 'undefined') ? ((Number(localStorage.getItem("caHolderBalance"))/100000000 || 0).toFixed(8)).toString() : 0;
     const menuList = [
         {
             id: 1,
