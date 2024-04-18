@@ -4,7 +4,7 @@ import AElf from 'aelf-sdk';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
-    const ipAddress = "34.72.199.84"; //34.134.26.210 10.0.1.17
+    const ipAddress = "35.224.183.238"; //34.134.26.210 10.0.1.17
 
     let { caAddress, wpk } = request.body;
 

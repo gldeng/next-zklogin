@@ -110,13 +110,14 @@ a {
   margin: 0 auto;
   background-color: #fff;
   box-shadow: 1px 1px 3px #00386e;
+  min-height: 600px;
 }
 
 @media (max-width: 480px) {
   /* CSS styles specific to smaller mobile devices */
 
   #__next {
-    height: 100vh;
+    min-height: 100vh;
     border: none;
     margin: 0;
     background-color: #fff;
