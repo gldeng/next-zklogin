@@ -54,7 +54,7 @@ export default function Home() {
     const caHolderTranxId = localStorage.getItem("caHolderTranxId") || '';
     if (userEmail && !isProofGenerated && !caHolderTranxId) {
       generateProof(idToken);
-      // setProofGenerated(true);
+      setProofGenerated(true);
     } else if (caHolderTranxId) {
       getBalance();
     }

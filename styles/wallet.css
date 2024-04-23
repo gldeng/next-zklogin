@@ -77,9 +77,9 @@
   margin-top: 30%
 }
 .title-h1 {
-  font-size: 40px;
+  font-size: 50px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 30px 0 20px 0;
   text-align: center;
 }
 .circle-list {
@@ -96,18 +96,22 @@
 }
 .circle-icon {
   background: #0f5dcb;
-  width: 35px;
-  height: 35px;
+  width: 85px;
+  height: 85px;
   border-radius: 100px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   color: #fff;
 }
+.circle-icon svg {
+  width: 40px;
+  height: 40px;
+}
 .circle-label {
-  font-size: 13px;
-  font-weight: 400;
-  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 12px;
 }
 .line {
   border: 0.5px solid #ececec;
@@ -179,4 +183,27 @@
   align-items: center;
   margin-top: -90px;
   flex: 1
+}
+
+@media (max-width: 480px) {
+  /* CSS styles specific to smaller mobile devices */
+  .circle-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .circle-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+  .circle-label {
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 4px;
+  }
+  .title-h1 {
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
 }
